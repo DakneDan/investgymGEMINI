@@ -4,8 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Invest Gym - Gymnázium Zlín</title>
+    <!-- Tailwind CSS v4 CDN -->
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style type="text/tailwindcss">
@@ -31,9 +34,14 @@
         .input-number-custom {
             @apply bg-slate-800 border border-slate-700 text-slate-100 text-sm rounded-lg focus:ring-gym-green focus:border-gym-green block p-2.5 text-center;
         }
+
+        /* Financial Times Typography adjustments */
+        .ft-serif {
+            font-family: Georgia, 'Times New Roman', Times, serif;
+        }
         
         .news-ticker-crisis {
-            @apply text-red-700 font-bold bg-red-100;
+            @apply text-red-700 font-black bg-red-100;
         }
 
         .glass-panel {
@@ -50,20 +58,11 @@
 </head>
 <body>
 
-    <div id="newsBanner" class="bg-ft-bg text-slate-900 font-serif px-4 py-2 border-b-4 border-slate-900 flex flex-col md:flex-row justify-between items-center transition-colors duration-500">
-        <div class="flex items-center gap-2 mb-1 md:mb-0">
-            <span class="font-bold uppercase tracking-widest text-xs border border-slate-900 px-1">Zlín Financial Gazette</span>
-            <span id="newsDate" class="text-xs italic text-slate-600">Kolo 0 (Inicializace)</span>
-        </div>
-        <div class="flex items-center gap-3 text-sm font-semibold text-center">
-            <div class="w-2 h-2 rounded-full bg-red-600 animate-pulse" id="breakingIndicator"></div>
-            <span id="newsHeadline">Nastavte své finanční cíle a připravte se na vstup na trh.</span>
-        </div>
-    </div>
-
+    <!-- Header & Branding -->
     <header class="bg-slate-900 border-b border-slate-800 sticky top-0 z-50 shadow-md">
         <div class="max-w-4xl mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center gap-3">
+                <!-- Inline SVG Logo -->
                 <div class="w-10 h-10 bg-white rounded-xl shadow-inner flex items-center justify-center relative overflow-hidden">
                     <svg viewBox="0 0 100 100" class="w-full h-full">
                         <text x="20" y="75" font-family="Arial, sans-serif" font-weight="900" font-size="75" fill="#008374">G</text>
@@ -81,8 +80,21 @@
         </div>
     </header>
 
+    <!-- Zlín Financial Gazette (News Ticker - UMÍSTĚN POD HLAVIČKOU) -->
+    <div id="newsBanner" class="bg-ft-bg text-slate-900 ft-serif px-4 py-2 border-b-2 border-slate-900 flex flex-col md:flex-row justify-between items-center transition-colors duration-500 shadow-inner z-40 relative">
+        <div class="flex items-center gap-2 mb-1 md:mb-0 border-r-2 border-slate-400/50 pr-3">
+            <span class="font-bold uppercase tracking-widest text-xs border-y border-slate-900 py-0.5">Zlín Financial Gazette</span>
+            <span id="newsDate" class="text-xs italic text-slate-600">Kolo 0 (Inicializace)</span>
+        </div>
+        <div class="flex items-center gap-3 text-sm font-semibold text-center flex-1 md:pl-3 justify-center md:justify-start">
+            <div class="w-2 h-2 rounded-full bg-red-600 animate-pulse shrink-0 shadow-[0_0_5px_rgba(220,38,38,0.8)]" id="breakingIndicator" title="Breaking News"></div>
+            <span id="newsHeadline" class="transition-all duration-300">Nastavte své finanční cíle a připravte se na vstup na trh.</span>
+        </div>
+    </div>
+
     <main class="max-w-4xl mx-auto px-4 py-6 space-y-6">
 
+        <!-- Dashboard -->
         <section class="glass-panel relative overflow-hidden">
             <div class="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
                 <i data-lucide="trending-up" class="w-32 h-32 text-gym-green"></i>
@@ -113,6 +125,7 @@
                 <canvas id="wealthChart"></canvas>
             </div>
 
+            <!-- Goal Progress Bars -->
             <div class="space-y-4">
                 <div>
                     <div class="flex justify-between text-sm mb-1">
@@ -133,15 +146,25 @@
                     </div>
                 </div>
             </div>
-            
-            <div class="mt-4 text-xs text-slate-500 text-right">
-                Průměrná inflace dekády: <span id="dashInflation" class="text-slate-300 font-semibold">--</span>%
-            </div>
         </section>
 
+        <!-- SETUP YEAR 0 -->
         <section id="year0Setup" class="glass-panel space-y-6">
             <h2 class="text-lg font-semibold flex items-center gap-2"><i data-lucide="settings-2" class="w-5 h-5 text-gym-orange"></i> Inicializace: Rok 0</h2>
             
+            <!-- Makroekonomický výhled a Inflace -->
+            <div class="bg-sky-900/30 border border-sky-500/50 p-4 rounded-lg relative overflow-hidden">
+                <i data-lucide="wind" class="absolute -right-4 -bottom-4 w-24 h-24 text-sky-500/10"></i>
+                <h3 class="text-sky-400 font-bold flex items-center gap-2 text-sm uppercase tracking-wider mb-2"><i data-lucide="bar-chart-3" class="w-4 h-4"></i> Makroekonomický výhled</h3>
+                <p class="text-sm text-sky-100">
+                    Pro následujících 10 let je na trzích predikována průměrná roční inflace ve výši: 
+                    <strong id="setupInflationText" class="text-xl text-sky-300 ml-2 bg-sky-950 px-2 py-1 rounded border border-sky-700 shadow-inner">--%</strong>
+                </p>
+                <p class="text-xs text-sky-400 mt-2">
+                    <i data-lucide="info" class="w-3 h-3 inline"></i> Tato hodnota zásadně ovlivní váš <strong>Reálný CAGR</strong>. Aby vaše peníze neztrácely kupní sílu, musí vaše investice generovat vyšší procentuální zisk, než je tato inflace.
+                </p>
+            </div>
+
             <div class="bg-slate-800/50 p-4 rounded-lg border border-slate-700">
                 <label class="block text-sm font-medium text-slate-300 mb-2">Počáteční vklad (Kč)</label>
                 <div class="flex items-center gap-4">
@@ -181,8 +204,10 @@
             </div>
         </section>
 
+        <!-- ACTIVE YEARS CONTROLS -->
         <section id="activeControls" class="space-y-6 hidden">
             
+            <!-- Step 1: Savings -->
             <div class="glass-panel">
                 <h2 class="text-lg font-semibold mb-4 flex items-center gap-2"><i data-lucide="piggy-bank" class="w-5 h-5 text-gym-green"></i> Krok 1: Měsíční úspory</h2>
                 <div class="flex items-center gap-4">
@@ -194,9 +219,11 @@
                 </p>
             </div>
 
+            <!-- Step 2: Distribution -->
             <div class="glass-panel relative">
                 <h2 class="text-lg font-semibold mb-4 flex items-center gap-2"><i data-lucide="split" class="w-5 h-5 text-gym-orange"></i> Krok 2: Rozdělení prostředků</h2>
                 
+                <!-- Calculator Accordion -->
                 <div class="mb-5 border border-slate-700 rounded-lg overflow-hidden">
                     <button id="calcToggle" class="w-full bg-slate-800 p-3 flex justify-between items-center text-sm hover:bg-slate-700 transition">
                         <span class="flex items-center gap-2"><i data-lucide="calculator" class="w-4 h-4 text-slate-400"></i> Pomocná finanční kalkulačka</span>
@@ -248,16 +275,20 @@
                 </div>
             </div>
 
+            <!-- Step 3: Asset Allocation -->
             <div class="glass-panel">
                 <h2 class="text-lg font-semibold mb-4 flex items-center gap-2"><i data-lucide="pie-chart" class="w-5 h-5 text-slate-300"></i> Krok 3: Složení aktiv</h2>
                 
+                <!-- Tabs -->
                 <div class="flex border-b border-slate-700 mb-4">
                     <button id="tabG1" class="flex-1 py-2 text-sm font-semibold text-gym-green border-b-2 border-gym-green transition-colors dyn-g1-name">Nové auto</button>
                     <button id="tabG2" class="flex-1 py-2 text-sm font-semibold text-slate-500 border-b-2 border-transparent hover:text-slate-300 transition-colors dyn-g2-name">Bydlení</button>
                 </div>
 
+                <!-- Allocation Controls Container -->
                 <div id="allocContainer" class="space-y-3">
-                    </div>
+                    <!-- Injected via JS to keep HTML clean and DRY -->
+                </div>
 
                 <div class="mt-4 flex justify-between items-center text-sm p-3 bg-slate-800 rounded-lg">
                     <span class="text-slate-400">Celkový součet:</span>
@@ -269,7 +300,8 @@
 
     </main>
 
-    <div class="fixed bottom-0 w-full bg-slate-900 border-t border-slate-800 p-4 shadow-[0_-10px_40px_rgba(0,0,0,0.5)] z-40">
+    <!-- Fixed Bottom Bar for Next Year Action -->
+    <div class="fixed bottom-0 w-full bg-slate-900 border-t border-slate-800 p-4 shadow-[0_-10px_40px_rgba(0,0,0,0.5)] z-50">
         <div class="max-w-4xl mx-auto flex justify-between items-center gap-4">
             <div class="text-xs text-slate-400 hidden sm:block">
                 Investiční horizont: <span class="font-bold text-white">10 let</span><br>
@@ -310,14 +342,15 @@
         const NEWS_SCENARIOS = [
             "Zlínská radnice schválila rozpočet. Trhy se otevírají investorům.",
             "Instantní summit studentů simulující Evropskou radu proběhl s obrovským úspěchem. Makroekonomika roste.",
-            "Slušovice oslavují své historické výročí (městem od 1996). Místní firmy vykazují stabilní zisky.",
-            "Oslavy 90. výročí gymnázia v parku Kotelna přilákaly i zahraniční investory. Trhy jsou klidné.",
+            "Slušovice oslavují své historické výročí. Místní firmy vykazují stabilní zisky.",
+            "Oslavy výročí gymnázia v parku Kotelna přilákaly i zahraniční investory. Trhy jsou klidné.",
             "Globální ekonomika nabírá na obrátkách, technologický sektor táhne indexy vzhůru.",
             "Centrální banky mírně upravují úrokové sazby. Tržní sentiment zůstává pozitivní.",
             "Mírné turbulence v dodavatelských řetězcích, ale akcie si drží svou pozici.",
             "Analytici varují před možným přehřátím trhu, ale euforie zatím pokračuje.",
-            "BREAKING NEWS: Globální trhy zasaženy tvrdou krizí! Akcie se propadají o 40 %!",
-            "EKONOMICKÁ ZIMA: Hluboká recese drtí portfolia. Komodity jako jediné těží z paniky na trzích."
+            "BREAKING NEWS: Globální trhy zasaženy tvrdou krizí! Akcie se propadají o desítky procent!",
+            "EKONOMICKÁ ZIMA: Hluboká recese drtí portfolia. Komodity jako jediné těží z paniky na trzích.",
+            "Trhy se pomalu začínají zotavovat. Uzavření investiční dekády."
         ];
 
         let chartInstance = null;
@@ -333,7 +366,7 @@
             dashProfit: document.getElementById('dashProfit'),
             dashCagr: document.getElementById('dashCagr'),
             dashRealCagr: document.getElementById('dashRealCagr'),
-            dashInflation: document.getElementById('dashInflation'),
+            setupInflationText: document.getElementById('setupInflationText'),
             barG1: document.getElementById('barG1'),
             barG2: document.getElementById('barG2'),
             progG1Val: document.getElementById('progG1Val'),
@@ -377,8 +410,9 @@
         // --- 3. INITIALIZATION ---
         function initApp() {
             lucide.createIcons();
-            state.inflation = (Math.random() * 2 + 2).toFixed(1); // 2.0% - 4.0%
-            els.dashInflation.textContent = state.inflation;
+            // Generate inflation between 2.0% and 4.0%
+            state.inflation = parseFloat((Math.random() * 2 + 2).toFixed(1)); 
+            els.setupInflationText.textContent = state.inflation.toFixed(1) + '%';
             
             initChart();
             buildAllocInputs();
@@ -436,7 +470,7 @@
                 updateUI();
             });
 
-            // Dist Sync (The clever logic to balance)
+            // Dist Sync
             els.distG1Slider.addEventListener('input', (e) => {
                 const v = Number(e.target.value);
                 state.goals.g1.distAmt = v;
@@ -482,16 +516,13 @@
                 const assetId = e.target.dataset.asset;
                 let val = Number(e.target.value);
                 
-                // Calculate sum of OTHERS
                 let sumOthers = 0;
                 Object.entries(state.goals[state.activeTab].alloc).forEach(([k, v]) => {
                     if (k !== assetId) sumOthers += v;
                 });
 
-                // Enforce max constraint without overwritting existing values
                 val = Math.min(val, 100 - sumOthers);
                 
-                // Save and update
                 state.goals[state.activeTab].alloc[assetId] = val;
                 updateAllocUI();
             };
@@ -503,7 +534,6 @@
         // --- 5. UI UPDATERS ---
         function updateUI() {
             const isY0 = state.year === 0;
-            const isY1 = state.year === 1; // Used just to toggle visibility classes once
 
             els.yearDisplay.textContent = state.year;
             
@@ -514,7 +544,7 @@
             } else {
                 els.year0Setup.classList.add('hidden');
                 els.activeControls.classList.remove('hidden');
-                els.btnNextText.textContent = state.year < 10 ? `Simulovat Rok ${state.year} a přejít na další` : "Ukončit simulaci (Zobrazit výsledky)";
+                els.btnNextText.textContent = state.year < 10 ? `Simulovat Rok ${state.year} a přejít na další` : "Ukončit simulaci a Zobrazit výsledky";
                 els.annualSavingsText.textContent = formatMoney(state.availableToDistribute);
             }
 
@@ -546,7 +576,6 @@
         }
 
         function updateDistUI() {
-            // Update slider max dynamically
             const maxVal = state.availableToDistribute;
             els.distG1Slider.max = maxVal;
             els.distG2Slider.max = maxVal;
@@ -566,7 +595,7 @@
                 els.btnNextYear.disabled = true;
             } else {
                 els.distWarning.classList.add('hidden');
-                els.btnNextYear.disabled = !isAllocValid(); // Also check alloc
+                els.btnNextYear.disabled = !isAllocValid(); 
             }
         }
 
@@ -579,18 +608,16 @@
                 const val = allocs[assetId];
                 el.value = val;
                 
-                // Calculate dynamic max for UI constraints
                 let sumOthers = 0;
                 Object.entries(allocs).forEach(([k, v]) => { if (k !== assetId) sumOthers += v; });
                 el.max = 100 - sumOthers;
                 
-                if (el.classList.contains('alloc-slider')) sum += val; // Count only once
+                if (el.classList.contains('alloc-slider')) sum += val; 
             });
 
             els.allocSumText.textContent = `${sum} %`;
             els.allocSumText.className = `font-bold text-lg ${sum === 100 ? 'text-gym-green' : 'text-gym-orange'}`;
             
-            // Allow proceed only if BOTH goals sum to exactly 100% and Distribution is valid
             els.btnNextYear.disabled = !isAllocValid() || (state.goals.g1.distAmt + state.goals.g2.distAmt !== state.availableToDistribute);
         }
 
@@ -617,14 +644,15 @@
             els.dashCagr.textContent = `${cagr.toFixed(2)}%`;
             els.dashCagr.className = cagr >= 0 ? 'text-gym-green' : 'text-red-500';
 
-            // Real CAGR
-            const infRate = state.inflation / 100;
-            const nomRate = cagr / 100;
+            // Real CAGR = ((1 + nominal) / (1 + inflation) - 1)
             let realCagr = 0;
             if (state.year > 0) {
+                const infRate = state.inflation / 100;
+                const nomRate = cagr / 100;
                 realCagr = ((1 + nomRate) / (1 + infRate) - 1) * 100;
             }
             els.dashRealCagr.textContent = `(${realCagr.toFixed(2)}%)`;
+            els.dashRealCagr.className = `text-xs font-normal ml-1 ${realCagr >= 0 ? 'text-slate-300' : 'text-red-400'}`;
 
             // Progress Bars
             const p1 = Math.min(100, (state.goals.g1.balance / state.goals.g1.target) * 100) || 0;
@@ -642,19 +670,26 @@
         }
 
         function updateNewsBanner() {
-            els.newsDate.textContent = state.year === 0 ? "Kolo 0 (Inicializace)" : `Začátek Roku ${state.year}`;
+            els.newsDate.textContent = state.year === 0 ? "Kolo 0 (Inicializace)" : `Rok ${state.year}`;
             els.newsHeadline.textContent = NEWS_SCENARIOS[state.year] || NEWS_SCENARIOS[0];
 
-            if (state.year >= 9) {
+            // Crisis Years styling (Years 9 and 10)
+            if (state.year === 9 || state.year === 10) {
                 els.newsBanner.classList.add('bg-red-100', 'border-red-900');
                 els.newsBanner.classList.remove('bg-ft-bg', 'border-slate-900');
                 els.newsHeadline.classList.add('news-ticker-crisis');
+                els.newsHeadline.classList.remove('text-slate-900');
+            } else {
+                els.newsBanner.classList.remove('bg-red-100', 'border-red-900');
+                els.newsBanner.classList.add('bg-ft-bg', 'border-slate-900');
+                els.newsHeadline.classList.remove('news-ticker-crisis');
+                els.newsHeadline.classList.add('text-slate-900');
             }
         }
 
         // --- 6. CORE LOGIC ---
         function processNextYear() {
-            if (state.year >= 10) return; // End of game
+            if (state.year >= 10) return;
 
             // 1. Add current year deposits to balances
             state.goals.g1.deposits += state.goals.g1.distAmt;
@@ -664,9 +699,7 @@
             state.goals.g1.balance += state.goals.g1.distAmt;
             state.goals.g2.balance += state.goals.g2.distAmt;
 
-            // 2. Simulate Market Returns (if not year 0)
-            // Wait, standard flow: User inputs money at start of year, allocation is set.
-            // When they click "Simulovat", a year passes, returns are generated on the balance.
+            // 2. Simulate Market Returns on the balance
             simulateMarket();
 
             // 3. Advance Year
@@ -677,9 +710,8 @@
             state.history.wealth.push(state.goals.g1.balance + state.goals.g2.balance);
             state.history.deposits.push(state.totalDeposits);
 
-            // Reset UI for new year (except allocs which persist)
+            // Reset UI for new year
             if (state.year <= 10) {
-                // If moving from Y0 to Y1, grab the monthly savings default
                 if (state.year === 1) {
                     const monthly = Number(els.monthlySavingsSlider.value);
                     state.availableToDistribute = monthly * 12;
@@ -688,7 +720,6 @@
             }
 
             if (state.year === 10) {
-                // Game Over state triggers
                 els.activeControls.innerHTML = `
                     <div class="glass-panel text-center py-10 space-y-4">
                         <h2 class="text-2xl font-bold text-gym-green flex items-center justify-center gap-3">
@@ -710,7 +741,8 @@
         }
 
         function simulateMarket() {
-            const isCrisis = state.year === 8 || state.year === 9; // Because it simulates the year that just finished (returns for Year 9 and 10)
+            // Krize se aplikuje při přechodu do Roku 9 a 10 (odpovídá výnosům v krizových letech)
+            const isCrisis = state.year === 8 || state.year === 9; 
             
             ['g1', 'g2'].forEach(gId => {
                 let currentBalance = state.goals[gId].balance;
@@ -726,17 +758,15 @@
                     let returnRate = 0;
 
                     if (isCrisis) {
-                        // Hard crisis scenario
                         switch(asset.id) {
                             case 'sp500': case 'etf': returnRate = -0.40; break;
                             case 'bonds': returnRate = -0.10; break;
                             case 'reit': returnRate = -0.15; break;
-                            case 'cmdty': returnRate = 0.10; break; // Commodities grow
-                            case 'savings': returnRate = 0.03; break; // Stable
+                            case 'cmdty': returnRate = 0.10; break; 
+                            case 'savings': returnRate = 0.03; break; 
                             case 'cash': returnRate = 0; break;
                         }
                     } else {
-                        // Normal year + noise
                         const noise = (Math.random() * asset.vol * 2) - asset.vol;
                         returnRate = asset.base + noise;
                     }
@@ -767,7 +797,6 @@
         }
 
         function resetDistribution(total) {
-            // By default put 50/50 or all to g2 if g1 is locked
             if (state.year > 3) {
                 state.goals.g1.distAmt = 0;
                 state.goals.g2.distAmt = total;
@@ -795,7 +824,6 @@
             } else {
                 const r = rate / 100 / 12;
                 const n = years * 12;
-                // PMT formula for future value: PMT = FV * r / ((1+r)^n - 1)
                 pmt = (fv * r) / (Math.pow(1 + r, n) - 1);
             }
             
