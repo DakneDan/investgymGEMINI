@@ -303,19 +303,59 @@
 
     <script>
         // --- 1. DATA & STATE ---
+        // Definice aktiv pouze pro UI zobrazení (ID a název)
         const ASSETS = [
-            { id: 'etf', name: 'ETF Světové Akcie', base: 0.07, vol: 0.15 },
-            { id: 'sp500', name: 'S&P 500', base: 0.08, vol: 0.16 },
-            { id: 'bonds', name: 'Globální Dluhopisy', base: 0.03, vol: 0.05 },
-            { id: 'cmdty', name: 'Komoditní Mix', base: 0.02, vol: 0.20 },
-            { id: 'reit', name: 'REIT (Nemovitosti)', base: 0.05, vol: 0.12 },
-            { id: 'savings', name: 'Spořicí účet', base: 0.03, vol: 0.00 },
-            { id: 'cash', name: 'Hotovost', base: 0.00, vol: 0.00 }
+            { id: 'etf', name: 'ETF Světové Akcie' },
+            { id: 'sp500', name: 'S&P 500' },
+            { id: 'bonds', name: 'Globální Dluhopisy' },
+            { id: 'cmdty', name: 'Komoditní Mix' },
+            { id: 'reit', name: 'REIT (Nemovitosti)' },
+            { id: 'savings', name: 'Spořicí účet' },
+            { id: 'cash', name: 'Hotovost' }
+        ];
+
+        // Přesně definovaná matice výnosů pro všech 10 let hry (bez jakékoliv náhody)
+        // Rok 1 = Index 0, Rok 10 = Index 9
+        const YEARLY_RETURNS = [
+            // Rok 1: Start (Místní rozpočty) - klidný mírný růst
+            { etf: 0.06, sp500: 0.07, bonds: 0.02, cmdty: 0.01, reit: 0.04, savings: 0.03, cash: 0 },
+            // Rok 2: Konjunktura - silný akciový rok
+            { etf: 0.14, sp500: 0.16, bonds: 0.01, cmdty: 0.02, reit: 0.05, savings: 0.03, cash: 0 },
+            // Rok 3: Éra dluhopisů - akcie zvolňují, dluhopisy nadprůměrné
+            { etf: 0.05, sp500: 0.06, bonds: 0.06, cmdty: 0.00, reit: 0.04, savings: 0.03, cash: 0 },
+            // Rok 4: Realitní boom - REIT dominuje
+            { etf: 0.06, sp500: 0.07, bonds: 0.02, cmdty: 0.01, reit: 0.14, savings: 0.03, cash: 0 },
+            // Rok 5: Komoditní rovnováha - komodity posilují
+            { etf: 0.08, sp500: 0.09, bonds: 0.02, cmdty: 0.08, reit: 0.05, savings: 0.03, cash: 0 },
+            // Rok 6: Lokální i globální růst - solidní napříč trhem
+            { etf: 0.10, sp500: 0.11, bonds: 0.02, cmdty: 0.02, reit: 0.07, savings: 0.03, cash: 0 },
+            // Rok 7: Diverzifikace a zpomalení - akcie chladnou
+            { etf: 0.03, sp500: 0.02, bonds: 0.04, cmdty: -0.01, reit: 0.02, savings: 0.03, cash: 0 },
+            // Rok 8: Varovné signály - první mírné ztráty dynamických aktiv
+            { etf: -0.04, sp500: -0.05, bonds: 0.05, cmdty: 0.04, reit: -0.02, savings: 0.03, cash: 0 },
+            // Rok 9: ČERNÁ LABUŤ (Krize) - masivní propad
+            { etf: -0.40, sp500: -0.42, bonds: -0.10, cmdty: 0.15, reit: -0.20, savings: 0.03, cash: 0 },
+            // Rok 10: Ekonomická zima - pokračující, ale mírnější propad
+            { etf: -0.15, sp500: -0.12, bonds: -0.05, cmdty: 0.05, reit: -0.10, savings: 0.03, cash: 0 }
+        ];
+
+        const NEWS_SCENARIOS = [
+            "MÍSTNÍ ROZPOČTY SCHVÁLENY: Zlín očekává stabilní dekádu. Trhy se otevírají. Jak chytře rozložíte svá aktiva napříč sektory?",
+            "GLOBÁLNÍ KONJUNKTURA: Inovace táhnou indexy vzhůru. Světové akcie a S&P 500 generují silné zisky díky rekordní spotřebitelské poptávce.",
+            "ÉRA DLUHOPISŮ: Vlády financují obří infrastrukturní projekty. Zvýšená poptávka po státních dluhopisech jim zajišťuje bezpečný a stabilní růst.",
+            "REALITNÍ BOOM: Nedostatek bytů a urbanizace tlačí ceny nemovitostí strmě nahoru. Realitní fondy (REIT) vykazují nadstandardní zhodnocení.",
+            "KOMODITNÍ ROVNOVÁHA: Ceny surovin stagnují díky efektivním dodavatelským řetězcům. Lokální firmy hlásí stabilní rozmach.",
+            "LOKÁLNÍ I GLOBÁLNÍ RŮST: Úspěšný studentský summit oživil diskusi o ekonomice EU. Akciové trhy zažívají euforii, spořicí účty generují stabilní výnos.",
+            "DIVERZIFIKACE V KURZU: Růst zisků korporací mírně zpomaluje. Velcí hráči začínají přesouvat kapitál z ETF fondů do bezpečnějších dluhopisů a hotovosti.",
+            "VAROVNÉ SIGNÁLY NA WALL STREET: Analytici varují před přehřátím. I přes poklidné lokální oslavy výročí gymnázia roste na globálních trzích nervozita.",
+            "TICHÁ PŘEDZVĚST BOUŘE: Volatilita trhů stoupá, makroekonomická data zklamávají. Jsou portfolia připravena na blížící se nevyhnutelnou korekci?",
+            "BREAKING NEWS: ČERNÁ LABUŤ! Globální krach odmazal 40 % z akcií a drtí i reality. Komodity naopak střílí vzhůru jako bezpečný přístav zasažených investorů!",
+            "EKONOMICKÁ ZIMA: Hluboká recese sráží i firemní dluhopisy. Ochránila vás alokace? Pouze hotovost a spořicí účty nyní bezpečně drží svou nominální hodnotu."
         ];
 
         let state = {
             year: 0,
-            inflation: 3.0, // Defaultní nastavitelná hodnota
+            inflation: 3.0, 
             totalDeposits: 0,
             availableToDistribute: 100000,
             goals: {
@@ -325,20 +365,6 @@
             activeTab: 'g1',
             history: { years: [0], wealth: [0], deposits: [0] }
         };
-
-        const NEWS_SCENARIOS = [
-            "Zlínská radnice schválila rozpočet. Trhy se otevírají investorům.",
-            "Instantní summit studentů simulující Evropskou radu proběhl s obrovským úspěchem. Makroekonomika roste.",
-            "Slušovice oslavují své historické výročí. Místní firmy vykazují stabilní zisky.",
-            "Oslavy výročí gymnázia v parku Kotelna přilákaly i zahraniční investory. Trhy jsou klidné.",
-            "Globální ekonomika nabírá na obrátkách, technologický sektor táhne indexy vzhůru.",
-            "Centrální banky mírně upravují úrokové sazby. Tržní sentiment zůstává pozitivní.",
-            "Mírné turbulence v dodavatelských řetězcích, ale akcie si drží svou pozici.",
-            "Analytici varují před možným přehřátím trhu, ale euforie zatím pokračuje.",
-            "BREAKING NEWS: Globální trhy zasaženy tvrdou krizí! Akcie se propadají o desítky procent!",
-            "EKONOMICKÁ ZIMA: Hluboká recese drtí portfolia. Komodity jako jediné těží z paniky na trzích.",
-            "Trhy se pomalu začínají zotavovat. Uzavření investiční dekády."
-        ];
 
         let chartInstance = null;
 
@@ -354,7 +380,6 @@
             dashCagr: document.getElementById('dashCagr'),
             dashRealCagr: document.getElementById('dashRealCagr'),
             
-            // Inflation
             inflationSlider: document.getElementById('inflationSlider'),
             inflationInput: document.getElementById('inflationInput'),
             
@@ -363,7 +388,6 @@
             progG1Val: document.getElementById('progG1Val'),
             progG2Val: document.getElementById('progG2Val'),
             
-            // Y0 Setup
             year0Setup: document.getElementById('year0Setup'),
             initDepositSlider: document.getElementById('initDepositSlider'),
             initDepositInput: document.getElementById('initDepositInput'),
@@ -372,13 +396,11 @@
             g1TargetInput: document.getElementById('g1TargetInput'),
             g2TargetInput: document.getElementById('g2TargetInput'),
             
-            // Active Controls
             activeControls: document.getElementById('activeControls'),
             monthlySavingsSlider: document.getElementById('monthlySavingsSlider'),
             monthlySavingsInput: document.getElementById('monthlySavingsInput'),
             annualSavingsText: document.getElementById('annualSavingsText'),
             
-            // Dist
             distG1Slider: document.getElementById('distG1Slider'),
             distG2Slider: document.getElementById('distG2Slider'),
             distG1ValText: document.getElementById('distG1ValText'),
@@ -388,7 +410,6 @@
             distG1Container: document.getElementById('distG1Container'),
             g1LockNotice: document.getElementById('g1LockNotice'),
             
-            // Alloc
             tabG1: document.getElementById('tabG1'),
             tabG2: document.getElementById('tabG2'),
             allocContainer: document.getElementById('allocContainer'),
@@ -429,13 +450,11 @@
 
         // --- 4. EVENT LISTENERS ---
         function setupEventListeners() {
-            // Inflation Sync
             syncInputSlider(els.inflationInput, els.inflationSlider, (val) => {
                 state.inflation = val;
                 updateDashboard();
             });
 
-            // Calculator
             document.getElementById('calcToggle').addEventListener('click', () => {
                 const c = document.getElementById('calcContent');
                 c.classList.toggle('hidden');
@@ -445,7 +464,6 @@
                 document.getElementById(id).addEventListener('input', runCalculator);
             });
 
-            // Y0 Setup Sync
             syncInputSlider(els.initDepositInput, els.initDepositSlider, (val) => {
                 state.availableToDistribute = val;
                 resetDistribution(val);
@@ -456,14 +474,12 @@
             els.g1TargetInput.addEventListener('input', e => { state.goals.g1.target = Number(e.target.value); updateUI(); });
             els.g2TargetInput.addEventListener('input', e => { state.goals.g2.target = Number(e.target.value); updateUI(); });
 
-            // Savings Sync
             syncInputSlider(els.monthlySavingsInput, els.monthlySavingsSlider, (val) => {
                 state.availableToDistribute = val * 12;
                 resetDistribution(state.availableToDistribute);
                 updateUI();
             });
 
-            // Dist Sync
             els.distG1Slider.addEventListener('input', (e) => {
                 const v = Number(e.target.value);
                 state.goals.g1.distAmt = v;
@@ -477,11 +493,9 @@
                 updateDistUI();
             });
 
-            // Tabs
             els.tabG1.addEventListener('click', () => switchTab('g1'));
             els.tabG2.addEventListener('click', () => switchTab('g2'));
 
-            // Next Year
             els.btnNextYear.addEventListener('click', processNextYear);
         }
 
@@ -501,7 +515,6 @@
                 els.allocContainer.appendChild(div);
             });
 
-            // Bind Hard Limit Logic
             const sliders = document.querySelectorAll('.alloc-slider');
             const inputs = document.querySelectorAll('.alloc-input');
 
@@ -541,7 +554,6 @@
                 els.annualSavingsText.textContent = formatMoney(state.availableToDistribute);
             }
 
-            // Lock Goal 1 after Year 3
             if (state.year > 3) {
                 els.distG1Container.classList.add('hidden');
                 els.g1LockNotice.classList.remove('hidden');
@@ -629,7 +641,6 @@
             els.dashProfit.textContent = formatMoney(profit);
             els.dashProfit.className = `text-xl font-bold ${profit >= 0 ? 'text-gym-green' : 'text-red-500'}`;
 
-            // CAGR Calc
             let cagr = 0;
             if (state.year > 0 && state.totalDeposits > 0) {
                 cagr = (Math.pow(wealth / state.totalDeposits, 1 / state.year) - 1) * 100;
@@ -637,7 +648,6 @@
             els.dashCagr.textContent = `${cagr.toFixed(2)}%`;
             els.dashCagr.className = cagr >= 0 ? 'text-gym-green' : 'text-red-500';
 
-            // Real CAGR = ((1 + nominal) / (1 + inflation) - 1)
             let realCagr = 0;
             if (state.year > 0) {
                 const infRate = state.inflation / 100;
@@ -647,13 +657,11 @@
             els.dashRealCagr.textContent = `(${realCagr.toFixed(2)}%)`;
             els.dashRealCagr.className = `text-xs font-normal ml-1 ${realCagr >= 0 ? 'text-slate-300' : 'text-red-400'}`;
 
-            // Progress Bars
             const p1 = Math.min(100, (state.goals.g1.balance / state.goals.g1.target) * 100) || 0;
             const p2 = Math.min(100, (state.goals.g2.balance / state.goals.g2.target) * 100) || 0;
             els.barG1.style.width = `${p1}%`;
             els.barG2.style.width = `${p2}%`;
 
-            // Chart
             if (chartInstance && state.history.years.length > 1) {
                 chartInstance.data.labels = state.history.years.map(y => `Rok ${y}`);
                 chartInstance.data.datasets[0].data = state.history.wealth;
@@ -666,7 +674,6 @@
             els.newsDate.textContent = state.year === 0 ? "Kolo 0 (Inicializace)" : `Rok ${state.year}`;
             els.newsHeadline.textContent = NEWS_SCENARIOS[state.year] || NEWS_SCENARIOS[0];
 
-            // Crisis Years styling (Years 9 and 10)
             if (state.year === 9 || state.year === 10) {
                 els.newsBanner.classList.add('bg-red-100', 'border-red-900');
                 els.newsBanner.classList.remove('bg-ft-bg', 'border-slate-900');
@@ -684,7 +691,7 @@
         function processNextYear() {
             if (state.year >= 10) return;
 
-            // 1. Add current year deposits to balances
+            // 1. Add current year deposits
             state.goals.g1.deposits += state.goals.g1.distAmt;
             state.goals.g2.deposits += state.goals.g2.distAmt;
             state.totalDeposits += state.availableToDistribute;
@@ -692,18 +699,16 @@
             state.goals.g1.balance += state.goals.g1.distAmt;
             state.goals.g2.balance += state.goals.g2.distAmt;
 
-            // 2. Simulate Market Returns on the balance
+            // 2. Simulate Market Returns on the balance using exact matrix
             simulateMarket();
 
             // 3. Advance Year
             state.year++;
             
-            // Save history
             state.history.years.push(state.year);
             state.history.wealth.push(state.goals.g1.balance + state.goals.g2.balance);
             state.history.deposits.push(state.totalDeposits);
 
-            // Reset UI for new year
             if (state.year <= 10) {
                 if (state.year === 1) {
                     const monthly = Number(els.monthlySavingsSlider.value);
@@ -734,8 +739,9 @@
         }
 
         function simulateMarket() {
-            // Krize se aplikuje při přechodu do Roku 9 a 10 (odpovídá výnosům v krizových letech)
-            const isCrisis = state.year === 8 || state.year === 9; 
+            // Použijeme přesně definované výnosy pro aktuální rok z matice YEARLY_RETURNS
+            const yearIndex = state.year;
+            const currentReturns = YEARLY_RETURNS[yearIndex];
             
             ['g1', 'g2'].forEach(gId => {
                 let currentBalance = state.goals[gId].balance;
@@ -748,21 +754,8 @@
                     if (weight === 0) return;
 
                     const invested = currentBalance * weight;
-                    let returnRate = 0;
-
-                    if (isCrisis) {
-                        switch(asset.id) {
-                            case 'sp500': case 'etf': returnRate = -0.40; break;
-                            case 'bonds': returnRate = -0.10; break;
-                            case 'reit': returnRate = -0.15; break;
-                            case 'cmdty': returnRate = 0.10; break; 
-                            case 'savings': returnRate = 0.03; break; 
-                            case 'cash': returnRate = 0; break;
-                        }
-                    } else {
-                        const noise = (Math.random() * asset.vol * 2) - asset.vol;
-                        returnRate = asset.base + noise;
-                    }
+                    // Přesná procenta přečtená z matice (např. 0.07 pro 7 %)
+                    const returnRate = currentReturns[asset.id];
 
                     newBalance += invested * (1 + returnRate);
                 });
