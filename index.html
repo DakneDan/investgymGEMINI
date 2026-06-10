@@ -4,11 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Invest Gym - Gymnázium Zlín</title>
-    <!-- Tailwind CSS v4 CDN -->
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style type="text/tailwindcss">
@@ -58,11 +55,9 @@
 </head>
 <body>
 
-    <!-- Header & Branding -->
     <header class="bg-slate-900 border-b border-slate-800 sticky top-0 z-50 shadow-md">
         <div class="max-w-4xl mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <!-- Inline SVG Logo -->
                 <div class="w-10 h-10 bg-white rounded-xl shadow-inner flex items-center justify-center relative overflow-hidden">
                     <svg viewBox="0 0 100 100" class="w-full h-full">
                         <text x="20" y="75" font-family="Arial, sans-serif" font-weight="900" font-size="75" fill="#008374">G</text>
@@ -80,7 +75,6 @@
         </div>
     </header>
 
-    <!-- Zlín Financial Gazette (News Ticker - UMÍSTĚN POD HLAVIČKOU) -->
     <div id="newsBanner" class="bg-ft-bg text-slate-900 ft-serif px-4 py-2 border-b-2 border-slate-900 flex flex-col md:flex-row justify-between items-center transition-colors duration-500 shadow-inner z-40 relative">
         <div class="flex items-center gap-2 mb-1 md:mb-0 border-r-2 border-slate-400/50 pr-3">
             <span class="font-bold uppercase tracking-widest text-xs border-y border-slate-900 py-0.5">Zlín Financial Gazette</span>
@@ -94,7 +88,6 @@
 
     <main class="max-w-4xl mx-auto px-4 py-6 space-y-6">
 
-        <!-- Dashboard -->
         <section class="glass-panel relative overflow-hidden">
             <div class="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
                 <i data-lucide="trending-up" class="w-32 h-32 text-gym-green"></i>
@@ -125,7 +118,6 @@
                 <canvas id="wealthChart"></canvas>
             </div>
 
-            <!-- Goal Progress Bars -->
             <div class="space-y-4">
                 <div>
                     <div class="flex justify-between text-sm mb-1">
@@ -148,20 +140,24 @@
             </div>
         </section>
 
-        <!-- SETUP YEAR 0 -->
         <section id="year0Setup" class="glass-panel space-y-6">
             <h2 class="text-lg font-semibold flex items-center gap-2"><i data-lucide="settings-2" class="w-5 h-5 text-gym-orange"></i> Inicializace: Rok 0</h2>
             
-            <!-- Makroekonomický výhled a Inflace -->
             <div class="bg-sky-900/30 border border-sky-500/50 p-4 rounded-lg relative overflow-hidden">
                 <i data-lucide="wind" class="absolute -right-4 -bottom-4 w-24 h-24 text-sky-500/10"></i>
-                <h3 class="text-sky-400 font-bold flex items-center gap-2 text-sm uppercase tracking-wider mb-2"><i data-lucide="bar-chart-3" class="w-4 h-4"></i> Makroekonomický výhled</h3>
-                <p class="text-sm text-sky-100">
-                    Pro následujících 10 let je na trzích predikována průměrná roční inflace ve výši: 
-                    <strong id="setupInflationText" class="text-xl text-sky-300 ml-2 bg-sky-950 px-2 py-1 rounded border border-sky-700 shadow-inner">--%</strong>
-                </p>
-                <p class="text-xs text-sky-400 mt-2">
-                    <i data-lucide="info" class="w-3 h-3 inline"></i> Tato hodnota zásadně ovlivní váš <strong>Reálný CAGR</strong>. Aby vaše peníze neztrácely kupní sílu, musí vaše investice generovat vyšší procentuální zisk, než je tato inflace.
+                <h3 class="text-sky-400 font-bold flex items-center gap-2 text-sm uppercase tracking-wider mb-3"><i data-lucide="bar-chart-3" class="w-4 h-4"></i> Makroekonomický výhled: Inflace</h3>
+                
+                <label class="block text-sm text-sky-100 mb-2">Nastavte předpokládanou průměrnou roční inflaci pro následujících 10 let:</label>
+                <div class="flex items-center gap-4 mb-3 z-10 relative">
+                    <input type="range" id="inflationSlider" min="0" max="15" step="0.1" value="3.0" class="slider-custom !accent-sky-400 flex-1">
+                    <div class="w-24 flex items-center gap-1">
+                        <input type="number" id="inflationInput" min="0" max="15" step="0.1" value="3.0" class="input-number-custom w-full !focus:ring-sky-400 !focus:border-sky-400">
+                        <span class="text-sky-300 font-bold">%</span>
+                    </div>
+                </div>
+
+                <p class="text-xs text-sky-400 relative z-10">
+                    <i data-lucide="info" class="w-3 h-3 inline"></i> Tato hodnota zásadně ovlivní váš <strong>Reálný CAGR</strong>. Aby vaše peníze neztrácely kupní sílu, musí investice generovat po celou dekádu vyšší procentuální zisk, než je zadaná inflace.
                 </p>
             </div>
 
@@ -204,10 +200,8 @@
             </div>
         </section>
 
-        <!-- ACTIVE YEARS CONTROLS -->
         <section id="activeControls" class="space-y-6 hidden">
             
-            <!-- Step 1: Savings -->
             <div class="glass-panel">
                 <h2 class="text-lg font-semibold mb-4 flex items-center gap-2"><i data-lucide="piggy-bank" class="w-5 h-5 text-gym-green"></i> Krok 1: Měsíční úspory</h2>
                 <div class="flex items-center gap-4">
@@ -219,11 +213,9 @@
                 </p>
             </div>
 
-            <!-- Step 2: Distribution -->
             <div class="glass-panel relative">
                 <h2 class="text-lg font-semibold mb-4 flex items-center gap-2"><i data-lucide="split" class="w-5 h-5 text-gym-orange"></i> Krok 2: Rozdělení prostředků</h2>
                 
-                <!-- Calculator Accordion -->
                 <div class="mb-5 border border-slate-700 rounded-lg overflow-hidden">
                     <button id="calcToggle" class="w-full bg-slate-800 p-3 flex justify-between items-center text-sm hover:bg-slate-700 transition">
                         <span class="flex items-center gap-2"><i data-lucide="calculator" class="w-4 h-4 text-slate-400"></i> Pomocná finanční kalkulačka</span>
@@ -275,20 +267,16 @@
                 </div>
             </div>
 
-            <!-- Step 3: Asset Allocation -->
             <div class="glass-panel">
                 <h2 class="text-lg font-semibold mb-4 flex items-center gap-2"><i data-lucide="pie-chart" class="w-5 h-5 text-slate-300"></i> Krok 3: Složení aktiv</h2>
                 
-                <!-- Tabs -->
                 <div class="flex border-b border-slate-700 mb-4">
                     <button id="tabG1" class="flex-1 py-2 text-sm font-semibold text-gym-green border-b-2 border-gym-green transition-colors dyn-g1-name">Nové auto</button>
                     <button id="tabG2" class="flex-1 py-2 text-sm font-semibold text-slate-500 border-b-2 border-transparent hover:text-slate-300 transition-colors dyn-g2-name">Bydlení</button>
                 </div>
 
-                <!-- Allocation Controls Container -->
                 <div id="allocContainer" class="space-y-3">
-                    <!-- Injected via JS to keep HTML clean and DRY -->
-                </div>
+                    </div>
 
                 <div class="mt-4 flex justify-between items-center text-sm p-3 bg-slate-800 rounded-lg">
                     <span class="text-slate-400">Celkový součet:</span>
@@ -300,7 +288,6 @@
 
     </main>
 
-    <!-- Fixed Bottom Bar for Next Year Action -->
     <div class="fixed bottom-0 w-full bg-slate-900 border-t border-slate-800 p-4 shadow-[0_-10px_40px_rgba(0,0,0,0.5)] z-50">
         <div class="max-w-4xl mx-auto flex justify-between items-center gap-4">
             <div class="text-xs text-slate-400 hidden sm:block">
@@ -328,7 +315,7 @@
 
         let state = {
             year: 0,
-            inflation: 0,
+            inflation: 3.0, // Defaultní nastavitelná hodnota
             totalDeposits: 0,
             availableToDistribute: 100000,
             goals: {
@@ -366,7 +353,11 @@
             dashProfit: document.getElementById('dashProfit'),
             dashCagr: document.getElementById('dashCagr'),
             dashRealCagr: document.getElementById('dashRealCagr'),
-            setupInflationText: document.getElementById('setupInflationText'),
+            
+            // Inflation
+            inflationSlider: document.getElementById('inflationSlider'),
+            inflationInput: document.getElementById('inflationInput'),
+            
             barG1: document.getElementById('barG1'),
             barG2: document.getElementById('barG2'),
             progG1Val: document.getElementById('progG1Val'),
@@ -410,10 +401,6 @@
         // --- 3. INITIALIZATION ---
         function initApp() {
             lucide.createIcons();
-            // Generate inflation between 2.0% and 4.0%
-            state.inflation = parseFloat((Math.random() * 2 + 2).toFixed(1)); 
-            els.setupInflationText.textContent = state.inflation.toFixed(1) + '%';
-            
             initChart();
             buildAllocInputs();
             setupEventListeners();
@@ -442,6 +429,12 @@
 
         // --- 4. EVENT LISTENERS ---
         function setupEventListeners() {
+            // Inflation Sync
+            syncInputSlider(els.inflationInput, els.inflationSlider, (val) => {
+                state.inflation = val;
+                updateDashboard();
+            });
+
             // Calculator
             document.getElementById('calcToggle').addEventListener('click', () => {
                 const c = document.getElementById('calcContent');
