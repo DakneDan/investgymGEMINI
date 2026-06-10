@@ -314,29 +314,29 @@
             { id: 'cash', name: 'Hotovost' }
         ];
 
-   // Přesně definovaná matice výnosů pro všech 10 let hry (realističtější scénář)
+        // Přesně definovaná matice výnosů pro všech 10 let hry (bez jakékoliv náhody)
         // Rok 1 = Index 0, Rok 10 = Index 9
         const YEARLY_RETURNS = [
-            // Rok 1: Start (Místní rozpočty) - solidní začátek
-            { etf: 0.12, sp500: 0.15, bonds: 0.02, cmdty: 0.01, reit: 0.08, savings: 0.03, cash: 0 },
-            // Rok 2: Konjunktura - silný akciový býčí trh (historicky běžné +20 až +30 %)
-            { etf: 0.22, sp500: 0.26, bonds: 0.01, cmdty: 0.02, reit: 0.12, savings: 0.03, cash: 0 },
-            // Rok 3: Éra dluhopisů - mírné ochlazení akcií, dluhopisy stabilní
-            { etf: 0.08, sp500: 0.09, bonds: 0.05, cmdty: 0.00, reit: 0.06, savings: 0.03, cash: 0 },
-            // Rok 4: Realitní boom - REIT dominuje, akcie letí dál v euforii
-            { etf: 0.20, sp500: 0.28, bonds: 0.02, cmdty: 0.04, reit: 0.35, savings: 0.03, cash: 0 },
-            // Rok 5: Komoditní rovnováha - růst tažený i surovinami
-            { etf: 0.12, sp500: 0.14, bonds: 0.02, cmdty: 0.18, reit: 0.05, savings: 0.03, cash: 0 },
-            // Rok 6: Lokální i globální růst - vrchol euforie a přehřívání ekonomiky
-            { etf: 0.18, sp500: 0.22, bonds: 0.01, cmdty: 0.05, reit: 0.10, savings: 0.03, cash: 0 },
-            // Rok 7: Diverzifikace a zpomalení - trh znatelně ztrácí dech
-            { etf: 0.05, sp500: 0.06, bonds: 0.04, cmdty: 0.02, reit: 0.02, savings: 0.03, cash: 0 },
-            // Rok 8: Varovné signály - první ztráty, bystří investoři utíkají do dluhopisů
-            { etf: -0.04, sp500: -0.05, bonds: 0.06, cmdty: 0.08, reit: -0.08, savings: 0.03, cash: 0 },
-            // Rok 9: ČERNÁ LABUŤ (Krize) - masivní propad (S&P 500 padá o 38 % jako v r. 2008), komodity a dluhopisy rostou
-            { etf: -0.35, sp500: -0.38, bonds: 0.12, cmdty: 0.25, reit: -0.40, savings: 0.03, cash: 0 },
-            // Rok 10: Ekonomická zima - dozvuky krize, trh krvácí dál, zachrání vás jen úroky v bance
-            { etf: -0.05, sp500: -0.08, bonds: 0.04, cmdty: -0.05, reit: -0.10, savings: 0.03, cash: 0 }
+            // Rok 1: Start (Místní rozpočty) - klidný mírný růst
+            { etf: 0.06, sp500: 0.07, bonds: 0.02, cmdty: 0.01, reit: 0.04, savings: 0.03, cash: 0 },
+            // Rok 2: Konjunktura - silný akciový rok
+            { etf: 0.14, sp500: 0.16, bonds: 0.01, cmdty: 0.02, reit: 0.05, savings: 0.03, cash: 0 },
+            // Rok 3: Éra dluhopisů - akcie zvolňují, dluhopisy nadprůměrné
+            { etf: 0.05, sp500: 0.06, bonds: 0.06, cmdty: 0.00, reit: 0.04, savings: 0.03, cash: 0 },
+            // Rok 4: Realitní boom - REIT dominuje
+            { etf: 0.06, sp500: 0.07, bonds: 0.02, cmdty: 0.01, reit: 0.14, savings: 0.03, cash: 0 },
+            // Rok 5: Komoditní rovnováha - komodity posilují
+            { etf: 0.08, sp500: 0.09, bonds: 0.02, cmdty: 0.08, reit: 0.05, savings: 0.03, cash: 0 },
+            // Rok 6: Lokální i globální růst - solidní napříč trhem
+            { etf: 0.10, sp500: 0.11, bonds: 0.02, cmdty: 0.02, reit: 0.07, savings: 0.03, cash: 0 },
+            // Rok 7: Diverzifikace a zpomalení - akcie chladnou
+            { etf: 0.03, sp500: 0.02, bonds: 0.04, cmdty: -0.01, reit: 0.02, savings: 0.03, cash: 0 },
+            // Rok 8: Varovné signály - první mírné ztráty dynamických aktiv
+            { etf: -0.04, sp500: -0.05, bonds: 0.05, cmdty: 0.04, reit: -0.02, savings: 0.03, cash: 0 },
+            // Rok 9: ČERNÁ LABUŤ (Krize) - masivní propad
+            { etf: -0.40, sp500: -0.42, bonds: -0.10, cmdty: 0.15, reit: -0.20, savings: 0.03, cash: 0 },
+            // Rok 10: Ekonomická zima - pokračující, ale mírnější propad
+            { etf: -0.15, sp500: -0.12, bonds: -0.05, cmdty: 0.05, reit: -0.10, savings: 0.03, cash: 0 }
         ];
 
         const NEWS_SCENARIOS = [
